@@ -1,0 +1,34 @@
+# Logs
+repo_processor.log
+
+# Python cache and virtual environment
+__pycache__/
+*.py[cod]
+*$py.class
+.python-version
+.venv/
+venv/
+env/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Output files
+!README.md
+
+# Local development settings
+.env
+.env.local
+*.env
