@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# chmod +x /home/balaji/workspace/repo-processor/repo_processor.py (after every change)
 import os
 import argparse
 import pathspec
@@ -18,6 +20,16 @@ logger = logging.getLogger(__name__)
 
 # Files and directories to always ignore by default
 DEFAULT_IGNORE_PATTERNS = ['.git']
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Process a repo.")
+    parser.add_argument(
+        "path",
+        nargs="?",
+        default=os.getcwd(),
+        help="Path to the repo (defaults to current directory)",
+    )
+    return parser.parse_args()
 
 def load_gitignore_patterns(repo_path):
     """Loads .gitignore patterns from the repository path."""
@@ -131,23 +143,21 @@ def generate_file_tree(repo_path, spec, output_file_path_abs):
     return "\n".join(tree_lines), files_to_read
 
 def main():
-    parser = argparse.ArgumentParser(description='Process a repository and create a combined text file.')
-    parser.add_argument('repo_path', type=str, help='Path to the repository to process.')
-    parser.add_argument('--output_file', type=str, default='repository_snapshot.txt', 
-                       help='Name of the output .txt file.')
-    parser.add_argument('--verbose', '-v', action='store_true', 
-                       help='Enable verbose logging (shows debug messages)')
-    args = parser.parse_args()
-    
+    args = parse_args()
+    # Support for output_file and verbose as before
+    output_file = 'repository_snapshot.txt'
+    verbose = False
+    # If you want to support --output_file and --verbose, parse them here or extend parse_args()
+
     # Set log level based on verbosity
-    if args.verbose:
+    if verbose:
         logger.setLevel(logging.DEBUG)
         logger.debug("Debug logging enabled")
     else:
         logger.setLevel(logging.INFO)
 
-    repo_path = Path(args.repo_path).resolve()
-    output_file_path = repo_path / args.output_file # Place output in the root of the processed repo
+    repo_path = Path(args.path).resolve()
+    output_file_path = repo_path / output_file # Place output in the root of the processed repo
     output_file_path_abs = output_file_path.resolve()
 
     if not repo_path.is_dir():
